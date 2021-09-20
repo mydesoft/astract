@@ -23,6 +23,9 @@ use Carbon\Carbon;
 |
 */
 
+
+
+
 //Authentication Controller
 Route::get('/', [AuthenticationController::class, 'login'])->name('login');
 Route::get('/register', [AuthenticationController::class, 'register'])->name('register');

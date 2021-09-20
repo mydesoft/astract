@@ -15,7 +15,7 @@ class WorkshopController extends Controller
     }
 
     public function create(){
-        $times = Time::orderBy('created_at', 'ASC')->get();
+        $times = Time::all();
         return view('admin.create-workshop', compact('times'));
     }
 
@@ -45,7 +45,7 @@ class WorkshopController extends Controller
     public function viewWorkshop($id){
         $workshop = Workshop::find($id);
         $workshopHour = unserialize($workshop->time);
-        $times = Time::orderBy('created_at', 'ASC')->pluck('name');
+        $times = Time::pluck('name');
         $time = json_decode($times);
         $results =  array_diff($time, $workshopHour);
         return view('admin.view-workshop')->with(['workshop' => $workshop, 'results' => $results, 'workshopHour' => $workshopHour]);
@@ -84,7 +84,7 @@ class WorkshopController extends Controller
     }
 
     public function bookedAppointment(){
-        $appointments = Appointment::orderBy('created_at', 'DESC')->get();
+        $appointments = Appointment::orderBy('created_at', 'desc')->get();
         return view('admin.booked-appointment', compact('appointments'));
     }
 
