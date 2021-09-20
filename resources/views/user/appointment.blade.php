@@ -153,19 +153,49 @@
      
 
       <div class="row">
-        <div class="col-md-8 offset-md-2">
+        <div class="col-md-12">
           <div class="box">
             <div class="box-header with-border">
-              <h3 class="box-title">User Profile</h3>
+              <h3 class="box-title">Booked Appointment(s)</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                <ul class="list-group">
-                    <li class="list-group-item">Name : {{Auth::user()->name}}</li>
-                    <li class="list-group-item">Email : {{Auth::user()->email}}</li>
-                    <li class="list-group-item">Username : {{Auth::user()->username}}</li>
-                    <li class="list-group-item">Status : {{Auth::user()->status}}</li>
-                </ul>
+                @if($appointments->count() > 0)
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Number</th>
+                                <th>Workshop Name</th>
+                                <th>Day</th>
+                                <th>Time</th>
+                                <th>Amount</th>
+                            </tr>
+
+                            <tbody>
+                                @foreach($appointments as $i => $appointment)
+                                <tr>
+                                    <td>{{$i + 1}}</td>
+                                    <td>{{$appointment->appointment_name}}</td>
+                                    <td>{{$appointment->appointment_day}}</td>
+                                    <td>
+                                        <?php
+                                            $hours = unserialize($appointment->hours);
+                                            foreach($hours as $hour){
+                                                echo $hour.',';
+                                            }
+                                        ?>
+                                    </td>
+                                    <td>{{$appointment->cost}}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </thead>
+                    </table>
+                </div>
+                @else
+                <h4 class="text-center">You have no booked appointment!</h4>
+                @endif
             </div>
           </div>
           <!-- /.box -->

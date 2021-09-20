@@ -76,6 +76,7 @@
         <!-- /.col -->
       </div>
       <!-- /.row -->
+
       <div class="row">
           <div class="col-md-6">
               @include('includes.message')
@@ -90,28 +91,41 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                @if($admins->count() - 1 > 0)
+                @if($appointments->count() > 0)
                <div class = "table-responsive">
                    <table class="table table-bordered table-striped tabble-hover">
                         <thead>
                             <tr>
-                                
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Username</th>
+                                <td>Number</td>
+                                <th>User Name</th>
+                                <th>Appointment Reason</th>
+                                <th>Appointment Name</th>
+                                <th>Appointment Day</th>
+                                <th>Appointment Hour(s)</th>
+                                <th>Appointment Cost</th>
                                 <th></th>
                             </tr>
                         </thead>
 
                         <tbody>
-                            @foreach ($admins as $admin)
-                                @if ($admin->id !== Auth::user()->id)
-                                  <tr>
-                                <td>{{$admin->name}}</td>
-                                <td>{{$admin->email}}</td>
-                                <td>{{$admin->username}}</td>
+                            @foreach ($appointments as $i => $appointment)
+                            <tr>
+                                <td>{{$i + 1}}</td>
+                                <td>{{$appointment->user->name}}</td>
+                                <td>{{$appointment->reason}}</td>
+                                <td>{{$appointment->appointment_name}}</td>
+                                <td>{{$appointment->appointment_day}}</td>
                                 <td>
-                                     <button class = "btn btn-sm btn-danger delete-btn-handler" data-toggle="modal" data-target="#modal-default" id="{{$admin->id}}">
+                                    <?php
+                                        $hours = unserialize($appointment->hours);
+                                        foreach($hours as $hour){
+                                            echo $hour.'<br>';
+                                        }
+                                    ?>
+                                </td>
+                                <td>{{$appointment->cost}}</td>
+                                <td>
+                                     <button class = "btn btn-sm btn-danger delete-btn-handler" data-toggle="modal" data-target="#modal-default" id="{{$appointment->id}}">
                                     <i class="fa fa-trash"></i> Delete
                                   </button>
                                    <div class="modal fade" id="modal-default">
@@ -120,7 +134,7 @@
                                         <div class="modal-header">
                                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span></button>
-                                          <h4 class="modal-title">Are you sure you want to delete this Admin?</h4>
+                                          <h4 class="modal-title">Are you sure you want to delete this Booked Appointment?</h4>
                                         </div>
                                         <div class="modal-body">
                                           <a id="confirm-delete">
@@ -134,13 +148,13 @@
                                       </div>
                                 </td>
                             </tr>  
-                                @endif
+                                
                             @endforeach
                         </tbody>
                     </table>
                </div>
                @else
-                <h5 class="text-center"> No Other Administrators Yet!</h5>
+                <h5 class="text-center"> No Booked Appointment Yet!</h5>
                @endif
             </div>
           </div>
@@ -177,7 +191,7 @@
           const id = event.target.id
           confirmDeleteBtn = document.getElementById('delete-btn')
           confirmDelete = document.getElementById('confirm-delete')
-          confirmDelete.setAttribute('href', `/delete/admin/${id}`)
+          confirmDelete.setAttribute('href', `/delete/appointment/${id}`)
         })
      })
      

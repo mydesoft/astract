@@ -20,6 +20,7 @@
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="{{asset('dist/css/skins/_all-skins.min.css')}}">
 
+
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -30,7 +31,8 @@
   <!-- Google Font -->
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-</head>
+
+    </head>
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
 
@@ -117,12 +119,12 @@
             </a>          
           </li>
 
-          <li>
-            <a href="{{route('appointment')}}">
-              <i class="fa fa-calendar-minus-o"></i>
-              <span>Your Booked Appointment(s)</span>
-            </a>
-          </li>
+        <li>
+          <a href="{{route('appointment')}}">
+            <i class="fa fa-calendar-minus-o"></i>
+            <span>Your Booked Appointment(s)</span>
+          </a>
+        </li>
 
          <li>
             <a href="{{route('logout')}}">
@@ -143,8 +145,8 @@
         Welcome {{Auth::user()->name}}
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
+        <li><a href="{{route('user-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Workshops</li>
       </ol>
     </section>
 
@@ -153,19 +155,81 @@
      
 
       <div class="row">
-        <div class="col-md-8 offset-md-2">
+        <div class="col-md-12 offset-md-2">
           <div class="box">
             <div class="box-header with-border">
-              <h3 class="box-title">User Profile</h3>
+              <h3 class="box-title">{{$workshop->name}} Workshop</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                <ul class="list-group">
-                    <li class="list-group-item">Name : {{Auth::user()->name}}</li>
-                    <li class="list-group-item">Email : {{Auth::user()->email}}</li>
-                    <li class="list-group-item">Username : {{Auth::user()->username}}</li>
-                    <li class="list-group-item">Status : {{Auth::user()->status}}</li>
-                </ul>
+               <div class="row">
+                   <div class="col-md-6">
+                       <div class="card">
+                           <div class="card-body">
+                               <ul class="list-group">
+                                   <li class="list-group-item"><h4>Workshop : {{$workshop->name}}</h4></li>
+                                   <li class="list-group-item"><h4>Workshop Opening Day: {{$workshop->day}}</h4></li>
+                                  
+                                   <li class="list-group-item">
+                                   <h4> <u>Workshop Opening Hours: </u></h4>
+                                     @foreach ($times as $i => $time)
+                                         <h4>{{$i + 1}} . {{$time}}</h4>
+                                     @endforeach
+                                   </li>
+                               </ul>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="col-md-6">
+                       <button class="btn btn-primary" id="appointment-btn"> <i class="fa fa-calendar-plus-o"></i> Book an Appointment</button>
+                        <div id="appointment-form">
+                            <div class="card">
+                                <div class="card-header"> <h4 class="text-primary">Book An Appointment</h4></div>
+                                @include('includes.message')
+                                <div class="card-body">
+                                    <ul class="list-group-item">
+                                            <form method = "POST" action="{{route('confirmAppointment', $workshop->id)}}">
+                                                @csrf
+                                                <div class="form-group">
+                                                    <label for="reason">
+                                                        <h4>Reason for appointment</h4>
+                                                    </label>
+                                                    <input type="text" name="reason" class="form-control">
+                                            
+                                                    <p class="text-danger" style="margin-top:10px;">
+                                                        Please tick the box(es) to select the hours you will be available <br>
+                                                        Note, for multiple hours(more than an hour appointment), tick multiple boxes.<br>
+                                                        An hour appointment cost N1000.
+                                            
+                                                    </p>
+                                                    <h4>Available Appointment Hours</h4>
+                                                    <div class="row">
+                                                        @foreach($times as $time)
+                                                        <div class="col-md-3">
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox" name="hours[]" value="{{$time}}" id="hours">
+                                                                    {{$time}}
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        @endforeach
+                                                    </div>
+                                                    
+                                                    <!-- <input type="hidden" name="cost" id="cost" value=""> -->
+
+                                                    <div class="text-center">
+                                                        <button class="btn btn-primary" id="booked-btn">Book Appointment</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+               </div>
             </div>
           </div>
           <!-- /.box -->
@@ -181,9 +245,6 @@
   <footer class="main-footer">
     <strong>Astract Test 2021 </strong>
   </footer>
-
-  
-  
   <div class="control-sidebar-bg"></div>
 </div>
 
@@ -192,21 +253,18 @@
 <!-- Bootstrap 3.3.7 -->
 <script src="{{asset('bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
 <!-- FastClick -->
-{{-- <script src="{{asset('bower_components/fastclick/lib/fastclick.js')}}"></script> --}}
+<!-- {{-- <script src="{{asset('bower_components/fastclick/lib/fastclick.js')}}"></script> --}} -->
 <!-- AdminLTE App -->
 <script src="{{asset('dist/js/adminlte.min.js')}}"></script>
 <!-- Sparkline -->
-{{-- <script src="{{asset('bower_components/jquery-sparkline/dist/jquery.sparkline.min.js')}}"></script> --}}
+<!-- {{-- <script src="{{asset('bower_components/jquery-sparkline/dist/jquery.sparkline.min.js')}}"></script> --}} -->
 <!-- jvectormap  -->
-{{-- <script src="{{asset('plugins/jvectormap/jquery-jvectormap-1.2.2.min.js')}}"></script> --}}
+<!-- {{-- <script src="{{asset('plugins/jvectormap/jquery-jvectormap-1.2.2.min.js')}}"></script> --}} -->
 
 <!-- SlimScroll -->
 <script src="{{asset('bower_components/jquery-slimscroll/jquery.slimscroll.min.js')}}"></script>
 <!-- ChartJS -->
 
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-{{-- <script src="{{asset('dist/js/pages/dashboard2.js')}}"></script> --}}
-<!-- AdminLTE for demo purposes -->
-{{-- <script src="{{asset('dist/js/demo.js')}}"></script> --}}
+
 </body>
 </html>

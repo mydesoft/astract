@@ -5,7 +5,11 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ContactController;
-use App\Models\Role;
+use App\Http\Controllers\WorkshopController;
+use App\Http\Controllers\AppointmentController;
+use App\Models\Appointment;
+use Carbon\Carbon;
+
 // use Auth;
 
 /*
@@ -18,6 +22,7 @@ use App\Models\Role;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 //Authentication Controller
 Route::get('/', [AuthenticationController::class, 'login'])->name('login');
 Route::get('/register', [AuthenticationController::class, 'register'])->name('register');
@@ -36,6 +41,15 @@ Route::group(['middleware' => ['auth']], function(){
     //Logged In User Route
     Route::group(['middleware' => ['user']], function(){
         Route::get('/user-dashboard', [UserController::class, 'dashboard'])->name('user-dashboard');
+        Route::get('/workshops', [UserController::class, 'workshops'])->name('workshops');
+        Route::get('/workshop/{workshop}', [UserController::class, 'showWorkshop'])->name('workshop');
+        //Appointment Routes
+        Route::post('/confirm-appointment/{workshop}', [AppointmentController::class, 'confirmAppointment'])->name('confirmAppointment');
+        Route::get('/continue-appointment', [AppointmentController::class, 'continueAppointment'])->name('continueAppointment');
+        Route::get('/create-appointment', [AppointmentController::class, 'createAppointment'])->name('createAppointment');
+        Route::get('/appointment-confirmation', [AppointmentController::class, 'appointmentConfirmation'])->name('appointmentConfirmation');
+        Route::get('/appointment', [AppointmentController::class, 'appointment'])->name('appointment');
+
 
     });
 
@@ -53,12 +67,14 @@ Route::group(['middleware' => ['auth']], function(){
         Route::get('/unread-messages', [AdminController::class, 'unreadMessages'])->name('unreadMessages');
         Route::get('/mark-as-read/{message}', [AdminController::class, 'markAsRead'])->name('markAsRead');
         Route::get('/delete-message/{message}', [AdminController::class, 'deleteMessage'])->name('deleteMessage');
-
-
-
-
-
-
+        Route::get('/show-workshop', [WorkshopController::class, 'showWorkshop'])->name('showWorkshop');
+        Route::get('/create-workshop', [WorkshopController::class, 'create'])->name('create');
+        Route::post('/create-workshop', [WorkshopController::class, 'createWorkshop'])->name('createWorkshop');
+        Route::get('/workshop/delete/{workshop}', [WorkshopController::class, 'deleteWorkshop'])->name('deleteWorkshop');
+        Route::get('/workshop/view/{workshop}', [WorkshopController::class, 'viewWorkshop'])->name('viewWorkshop');
+        Route::post('/workshop/update/{workshop}', [WorkshopController::class, 'updateWorkshop'])->name('updateWorkshop');
+        Route::get('/booked-appointment', [WorkshopController::class, 'bookedAppointment'])->name('bookedAppointment');
+        Route::get('/delete/appointment/{id}', [WorkshopController::class, 'deleteBookedAppointment'])->name('deleteBookedAppointment');
 
     });
 });

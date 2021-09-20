@@ -9,8 +9,8 @@
         Welcome Admin 
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
+        <li><a href="{{route('admin-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Workshop</li>
       </ol>
     </section>
 
@@ -76,71 +76,77 @@
         <!-- /.col -->
       </div>
       <!-- /.row -->
-      <div class="row">
-          <div class="col-md-6">
-              @include('includes.message')
-          </div>
-      </div>
-      
+
+        <div class ="col-md-6 offset-md-3">
+          @include('includes.message')
+        </div>
       <div class="row">
         <div class="col-md-12">
           <div class="box">
             <div class="box-header with-border">
-              <h3 class="box-title">Admins</h3>
+              <h3 class="box-title">Created Workshop</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                @if($admins->count() - 1 > 0)
+            <div class="row" style="margin-bottom: 20px;">
+              <div class="col-md-4">
+                <form action="">
+                  <label for="search">Search</label>
+                  <input type="text" class="form-control" id="search" placeholder="search workshops...">
+                </form>
+              </div>
+            </div>
+            @if ($workshops->count() > 0)
+                
                <div class = "table-responsive">
-                   <table class="table table-bordered table-striped tabble-hover">
+                   <table class="table table-bordered table-striped table-hover">
                         <thead>
                             <tr>
-                                
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Username</th>
+                                <th>Number</th>
+                                <th>Workshop Name</th>
+                                <th>Workshop Day</th>
+                                <th>Workshop Hours</th>
+                                <th></th>
                                 <th></th>
                             </tr>
                         </thead>
 
                         <tbody>
-                            @foreach ($admins as $admin)
-                                @if ($admin->id !== Auth::user()->id)
-                                  <tr>
-                                <td>{{$admin->name}}</td>
-                                <td>{{$admin->email}}</td>
-                                <td>{{$admin->username}}</td>
+                          @foreach ($workshops as $i => $workshop)
+                                <tr id="workshop-row">
+                                <td>{{$i + 1}}</td>
+                                <td id="workshop-name">{{$workshop->name}}</td>
+                                <td>{{$workshop->day}}</td>
+                                
                                 <td>
-                                     <button class = "btn btn-sm btn-danger delete-btn-handler" data-toggle="modal" data-target="#modal-default" id="{{$admin->id}}">
-                                    <i class="fa fa-trash"></i> Delete
-                                  </button>
-                                   <div class="modal fade" id="modal-default">
-                                    <div class="modal-dialog">
-                                      <div class="modal-content">
-                                        <div class="modal-header">
-                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span></button>
-                                          <h4 class="modal-title">Are you sure you want to delete this Admin?</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                          <a id="confirm-delete">
-                                             <button class="btn btn-danger" id="delete-btn">Continue</button>
-                                          </a>
-                                        
-                                        <button class="btn btn-primary pull-right" data-dismiss="modal">Cancel</button>
-                                        </div>
-                                      </div>
-                                      </div>
-                                      </div>
+                                  <?php
+                                  $workshopHour = unserialize($workshop->time);
+                                  foreach($workshopHour as $hour){
+                                    echo $hour .'<br>';
+                                  }
+                                  ?>
                                 </td>
-                            </tr>  
-                                @endif
-                            @endforeach
+                                
+                               <td>
+                                   <a href="{{route('viewWorkshop', $workshop->id)}}"><button class="btn btn-sm btn-info"><i class="fa fa-eye"></i>View</button></a>
+                               </td>
+
+                                <td>
+                                  <a href="/workshop/delete/{{$workshop->id}}">
+                                    <button class = "btn btn-sm btn-danger">
+                                      <i class="fa fa-trash"></i> Delete
+                                    </button>
+                                  </a>
+                                   
+                                </td>
+                            </tr>
+                            
+                          @endforeach
                         </tbody>
                     </table>
                </div>
                @else
-                <h5 class="text-center"> No Other Administrators Yet!</h5>
+                <h4 class ="text-center"> No Workshop created Yet!</h5>
                @endif
             </div>
           </div>
@@ -165,21 +171,22 @@
 
 @endsection
 
-
 @section('extra-js')
  <script>
-     const deleteBtns = document.querySelectorAll('.delete-btn-handler')
-     const deleteBtn = Array.from(deleteBtns)
-     console.log(deleteBtn.length)
-     
-     deleteBtn.forEach((btn) => {
-        btn.addEventListener('click', event => {
-          const id = event.target.id
-          confirmDeleteBtn = document.getElementById('delete-btn')
-          confirmDelete = document.getElementById('confirm-delete')
-          confirmDelete.setAttribute('href', `/delete/admin/${id}`)
-        })
+     document.getElementById('search').addEventListener('keyup', () => {
+       const name = event.target.value.toUpperCase();
+       const tableRows = document.querySelectorAll('#workshop-row');
+       const tableData = document.querySelectorAll('#workshop-name');
+       tableRows.forEach(workshop => {
+         const workshopName = workshop.firstElementChild.nextElementSibling.textContent.toUpperCase()
+         if (workshopName.indexOf(name) > -1) {
+           workshop.style.display = '';
+         }
+         else {
+           workshop.style.display = 'none';
+         }
+
+       });
      })
-     
  </script>
 @endsection

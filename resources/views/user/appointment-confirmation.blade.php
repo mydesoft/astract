@@ -124,6 +124,7 @@
             </a>
           </li>
 
+
          <li>
             <a href="{{route('logout')}}">
               <i class="fa fa-sign-out text-danger"></i>
@@ -139,36 +140,41 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>
-        Welcome {{Auth::user()->name}}
-      </h1>
+      <h4 class="text-center text-primary">
+        Appointment Confirmation Reciept
+      </h4>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
+        <li><a href="{{route('user-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Confirmation</li>
       </ol>
     </section>
 
     <!-- Main content -->
     <section class="content">
-     
-
       <div class="row">
-        <div class="col-md-8 offset-md-2">
-          <div class="box">
-            <div class="box-header with-border">
-              <h3 class="box-title">User Profile</h3>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-                <ul class="list-group">
-                    <li class="list-group-item">Name : {{Auth::user()->name}}</li>
-                    <li class="list-group-item">Email : {{Auth::user()->email}}</li>
-                    <li class="list-group-item">Username : {{Auth::user()->username}}</li>
-                    <li class="list-group-item">Status : {{Auth::user()->status}}</li>
+        <div class="col-md-8">
+        @include('includes.message')
+            <div class="justify-content-center">
+                <ul class="list-group-item">
+                    <p class="text-danger">
+                        <div class = "pull-right"><button class="btn btn-sm btn-primary"> <i class="fa fa-download"></i> Download Appointment</button></div>
+                        <div class="text-danger">
+                            Dear {{Auth::user()->name}}, here is your Appointment details. <br>
+                            Booked Appointment : {{session('bookedAppointmentName')}}. <br>
+                            Booked Day : {{session('bookedDay')}}. <br>
+                            Booked Hour : 
+                            @foreach (session('bookedHour') as $hour)
+                                {{$hour}}, 
+                            @endforeach
+                            <hr>
+                        </div>
+                        
+                        Total Amount for Booking: N{{session('cost')}}.
+
+
+                    </p>
                 </ul>
             </div>
-          </div>
-          <!-- /.box -->
         </div>
         <!-- /.col -->
       </div>

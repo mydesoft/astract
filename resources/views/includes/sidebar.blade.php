@@ -61,6 +61,28 @@
           </ul>
         </li>
 
+        <li class="treeview">
+          <a href="#">
+            <i class="fa  fa-bookmark"></i>
+            <span>Workshop</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="{{route('showWorkshop')}}"><i class="fa fa-eye"></i> View Workshop(s)</a></li>
+            <li><a href="{{route('create')}}"><i class="fa fa-plus-square"></i> Create New Workshop(s)</a></li>
+            
+          </ul>
+        </li>
+
+        <li>
+            <a href="{{route('bookedAppointment')}}">
+              <i class="fa fa-calendar-minus-o"></i>
+              <span>Booked Users Appointment</span>
+            </a>          
+          </li>
+
         <li>
             <a href="{{route('logout')}}">
               <i class="fa fa-sign-out text-danger"></i>

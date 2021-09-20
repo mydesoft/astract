@@ -124,6 +124,7 @@
             </a>
           </li>
 
+
          <li>
             <a href="{{route('logout')}}">
               <i class="fa fa-sign-out text-danger"></i>
@@ -139,12 +140,12 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-      <h1>
-        Welcome {{Auth::user()->name}}
-      </h1>
+      <h4 class="text-center text-primary">
+        Appointment Confirmation
+      </h4>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
+        <li><a href="{{route('user-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Confirmation</li>
       </ol>
     </section>
 
@@ -153,22 +154,41 @@
      
 
       <div class="row">
-        <div class="col-md-8 offset-md-2">
-          <div class="box">
-            <div class="box-header with-border">
-              <h3 class="box-title">User Profile</h3>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-                <ul class="list-group">
-                    <li class="list-group-item">Name : {{Auth::user()->name}}</li>
-                    <li class="list-group-item">Email : {{Auth::user()->email}}</li>
-                    <li class="list-group-item">Username : {{Auth::user()->username}}</li>
-                    <li class="list-group-item">Status : {{Auth::user()->status}}</li>
+        <div class="col-md-8">
+            <div class="justify-content-center">
+                <ul class="list-group-item">
+                    <h4>
+                        
+                            Dear {{Auth::user()->name}}, you are trying to book an appointment with the following details; <br>
+                            Booked Appointment : {{session('appointment_name')}}. <br>
+                            Booked Day : {{session('appointment_day')}}. <br>
+                            Booked Hour : 
+                            @foreach (session('hours') as $hour)
+                                {{$hour}}, 
+                                @endforeach
+                                <hr>
+                                <p class="text-danger">Total Amount for Booking: N{{session('cost')}}</p >
+                        </h4>
+                           
+                        <a href="{{route('createAppointment')}}">
+
+                            <button class="btn btn-sm btn-primary"> <i class="fa fa-check"></i> Book my Appointment</button>
+                        </a>
+                        
+                        <a href="{{route('workshops')}}">
+
+                            <button class="btn btn-sm btn-danger pull-right"> <i class="fa fa-times"></i> Cancel Appointment</button>
+                        </a>
+                        
+                        
+                            
+                            
+                        
+                        
+
+
                 </ul>
             </div>
-          </div>
-          <!-- /.box -->
         </div>
         <!-- /.col -->
       </div>

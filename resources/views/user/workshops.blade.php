@@ -117,7 +117,7 @@
             </a>          
           </li>
 
-          <li>
+         <li>
             <a href="{{route('appointment')}}">
               <i class="fa fa-calendar-minus-o"></i>
               <span>Your Booked Appointment(s)</span>
@@ -143,8 +143,8 @@
         Welcome {{Auth::user()->name}}
       </h1>
       <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
+        <li><a href="{{route('user-dashboard')}}"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Workshops</li>
       </ol>
     </section>
 
@@ -153,19 +153,28 @@
      
 
       <div class="row">
-        <div class="col-md-8 offset-md-2">
+        <div class="col-md-8">
           <div class="box">
             <div class="box-header with-border">
-              <h3 class="box-title">User Profile</h3>
+              <h3 class="box-title">Available Workshops</h3>
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                <ul class="list-group">
-                    <li class="list-group-item">Name : {{Auth::user()->name}}</li>
-                    <li class="list-group-item">Email : {{Auth::user()->email}}</li>
-                    <li class="list-group-item">Username : {{Auth::user()->username}}</li>
-                    <li class="list-group-item">Status : {{Auth::user()->status}}</li>
-                </ul>
+                @if($workshops->count() > 0)
+                    <ul class="list-group">
+                        <div class="row">
+                            @foreach($workshops as $workshop)
+                            <div class="col-md-4" style="margin-bottom: 15px;">
+                                <a href="{{route('workshop', $workshop->id)}}">
+                                    <button class="btn btn-primary btn-sm">{{$workshop->name}}</button>
+                                </a>
+                            </div>
+                            @endforeach
+                        </div>
+                    </ul>
+                @else
+                <h4 class="text-center">No Workshop(s) Available!</h4>
+                @endif
             </div>
           </div>
           <!-- /.box -->
