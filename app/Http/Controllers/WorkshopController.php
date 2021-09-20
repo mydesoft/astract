@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Workshop;
-use App\models\Time;
-use App\models\Appointment;
+use App\Models\Time;
+use App\Models\Appointment;
 
 class WorkshopController extends Controller
 {
