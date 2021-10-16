@@ -7,7 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\WorkshopController;
 use App\Http\Controllers\AppointmentController;
-use App\Models\Appointment;
+use App\Models\Workshop;
 use Carbon\Carbon;
 
 // use Auth;
@@ -22,9 +22,6 @@ use Carbon\Carbon;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-
-
 
 //Authentication Controller
 Route::get('/', [AuthenticationController::class, 'login'])->name('login');

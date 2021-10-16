@@ -96,8 +96,8 @@
                 </form>
               </div>
             </div>
+            <h4 id="no-data"></h4>
             @if ($workshops->count() > 0)
-                
                <div class = "table-responsive">
                    <table class="table table-bordered table-striped table-hover">
                         <thead>
@@ -184,6 +184,7 @@
          }
          else {
            workshop.style.display = 'none';
+          
          }
 
        });

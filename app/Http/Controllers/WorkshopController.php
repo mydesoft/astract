@@ -9,11 +9,6 @@ use App\Models\Appointment;
 
 class WorkshopController extends Controller
 {
-    public function showWorkshop(){
-        $workshops = Workshop::orderBy('created_at', 'ASC')->get();
-        return view('admin.show-workshop', compact('workshops'));
-    }
-
     public function create(){
         $times = Time::all();
         return view('admin.create-workshop', compact('times'));
@@ -40,6 +35,11 @@ class WorkshopController extends Controller
     $workshop->time = serialize(request()->time);
     $workshop->save();
     return back()->with('success', 'Workshop created successfully');
+    }
+
+    public function showWorkshop(){
+        $workshops = Workshop::orderBy('created_at', 'ASC')->get();
+        return view('admin.show-workshop', compact('workshops'));
     }
 
     public function viewWorkshop($id){
